@@ -1,0 +1,24 @@
+let
+    // Définir la date de début et la date de fin
+    StartDate = #date(2020, 1, 1),
+    EndDate = #date(2025, 12, 31),
+
+    // Calculer la durée
+    NumberOfDays = Duration.Days(EndDate - StartDate),
+
+    // Créer la liste de dates
+    DateList = List.Dates(StartDate, NumberOfDays + 1, #duration(1, 0, 0, 0)),
+
+    // Transformer la liste en table
+    DateTable = Table.FromList(DateList, Splitter.SplitByNothing(), {"Date"}),
+
+    // Ajouter colonnes dérivées
+    AddYear = Table.AddColumn(DateTable, "Année", each Date.Year([Date]), type number),
+    AddMonth = Table.AddColumn(AddYear, "Mois", each Date.Month([Date]), type number),
+    AddMonthName = Table.AddColumn(AddMonth, "Nom du mois", each Date.ToText([Date], "MMMM"), type text),
+    AddQuarter = Table.AddColumn(AddMonthName, "Trimestre", each Date.QuarterOfYear([Date]), type number),
+    AddWeekDay = Table.AddColumn(AddQuarter, "Jour de la semaine", each Date.DayOfWeek([Date]) + 1, type number),
+    AddWeekDayName = Table.AddColumn(AddWeekDay, "Nom du jour", each Date.ToText([Date], "dddd"), type text),
+    AddMonthYear = Table.AddColumn(AddWeekDayName, "Mois-Année", each Text.PadStart(Text.From([Mois]), 2, "0") & "-" & Text.From([Année]), type text)
+in
+    AddMonthYear

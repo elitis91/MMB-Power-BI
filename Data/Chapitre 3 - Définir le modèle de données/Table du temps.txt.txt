@@ -1,0 +1,10 @@
+Table Dates =
+-- ce script crée une table de temps du 1er janvier 2018 à aujourd’hui
+ADDCOLUMNS (CALENDAR (DATE (2018,1,1),TODAY()),
+	"Année", FORMAT([Date],"YYYY"), "Numéro du Mois",MONTH([Date]),
+	"Nom du mois",FORMAT([Date],"MMMM"),
+	"Année Mois",FORMAT([Date],"YYYY MMMM"),
+	"Nom du jour",FORMAT([Date],"DDD d MMM YY")
+)
+
+
